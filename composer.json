@@ -1,0 +1,24 @@
+{
+    "name": "borhan/apiforblog",
+    "authors": [
+        {
+            "name": "burhan.mofakhrei",
+            "email": "burhan.mofakhrei@gmail.com"
+        }
+    ],
+    "description": "api for blog",
+    "type": "project",
+    "license": "MIT",
+    "autoload":
+    {
+        "psr-4":{
+            "Application\\":"Application/"
+        }
+    },
+    "require": {
+        "illuminate/database": "^5.5",
+        "illuminate/events": "^5.5",
+         "ext-json": "*",
+        "firebase/php-jwt": "^5.0"
+    }
+}
