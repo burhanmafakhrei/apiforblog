@@ -6,6 +6,7 @@ namespace Application\Controllers;
 
 use Application\Models\User;
 use Application\Repositories\UserRepository;
+use Application\Services\jsondata\jsondata;
 use Application\Services\logging\logging;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
@@ -39,19 +40,15 @@ class UserController
                 $data = ['action' => 'success register', 'massage' => $result->user_email];
 
             } else {
-                $data = ['action' => 'failed register', 'massage' => $result->user_email];
+                $data = ['action' => 'failed register', 'massage' => ''];
             }
-            $this->ReturnJson($data);
             logging::logging($data);
+            jsondata::ReturnJson($data);
+
 
         }
     }
 
-    public function ReturnJson(array $data)
-    {
-        header('Content-type: application/json');
-        echo json_encode($data);
-    }
 
     public function DuplicateEmail(string $email)
     {
@@ -62,7 +59,7 @@ class UserController
         if ($result && $result instanceof User) {
             $data = ['action' => 'failed register', 'massage' => 'email is duplicate'];
             logging::logging($data);
-            $this->ReturnJson($data);
+            jsondata::ReturnJson($data);
             return true;
         }
 
@@ -80,7 +77,7 @@ class UserController
         }
     }
 
-    public function Login()
+    public function login()
     {
         $criteria = [
             'user_email' => $this->data->email,
@@ -89,18 +86,19 @@ class UserController
         $result = $this->usersRepository->findBy($criteria, 1);
         if ($result && $result instanceof User) {
             $token = $this->GetJwt($result);
-            $data = ['action' => 'success login', 'massage' => $result->user_email, 'token' => $token];
+            $data = ['action' => 'success login', 'massage' => $result->user_email, 'jwt' => $token];
         } else {
             $data = ['action' => 'failed login', 'massage' => 'email or password mistake'];
         }
         logging::logging($data);
-        $this->ReturnJson($data);
+        jsondata::ReturnJson($data);
     }
 
     public function GetJwt(User $user)
     {
 
         $token = array(
+            "id" => $user->user_id,
             "email" => $user->user_email,
             "password" => $user->user_password
         );

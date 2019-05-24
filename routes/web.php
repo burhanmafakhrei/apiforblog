@@ -8,9 +8,20 @@ return [
         'target'     => 'UserController@login',
         'middleware' => ''
     ],
-    '/api/users/Logined@post'                => [
+    '/api/users/logined@post'                => [
         'target'     => 'UserController@Logined',
         'middleware' => ''
     ],
-
+    '/api/post/add@post'                => [
+        'target'     => 'PostController@add',
+        'middleware' => 'true'
+    ],
+    '/api/post/edit@post'                => [
+        'target'     => 'PostController@edit',
+        'middleware' => 'true'
+    ],
+    '/api/post/del@post'                => [
+        'target'     => 'PostController@del',
+        'middleware' => 'true'
+    ],
 ];
