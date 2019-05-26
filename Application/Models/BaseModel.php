@@ -9,9 +9,11 @@
 namespace Application\Models;
 
 
-use Illuminate\Database\Eloquent\Model;
+
+
+use Application\database\Model;
 
 class BaseModel extends Model {
-	public $timestamps = false;
+
 
 }

@@ -19,13 +19,13 @@ class UserController
 
     public function __construct()
     {
-        $this->usersRepository = new UserRepository();
+       $this->usersRepository=new User();
         $this->data = json_decode(file_get_contents("php://input"));
     }
 
     public function add()
     {
-        if (!$this->DuplicateEmail($this->data->email)) {
+        if (1) {
             $newUserData = [
                 'user_name' => $this->data->name,
                 'user_email' => $this->data->email,
@@ -34,7 +34,7 @@ class UserController
                 'user_ip' => $_SERVER['REMOTE_ADDR'],
                 'user_created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ];
-            $result = $this->usersRepository->create($newUserData);
+            $result = $this->usersRepository->save($newUserData);
 
             if ($result && $result instanceof User) {
                 $data = ['action' => 'success register', 'massage' => $result->user_email];

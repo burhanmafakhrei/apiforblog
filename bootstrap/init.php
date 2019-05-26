@@ -5,11 +5,11 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    use Illuminate\Database\Capsule\Manager as Capsule;
-
 session_start();
 
-$capsule = new Capsule;
+/*
+  use Illuminate\Database\Capsule\Manager as Capsule;
+  $capsule = new Capsule;
 
 $capsule->addConnection( [
     'driver'    => 'mysql',
@@ -32,6 +32,6 @@ $capsule->setEventDispatcher( new Dispatcher( new Container ) );
 $capsule->setAsGlobal();
 
 // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
-$capsule->bootEloquent();
+$capsule->bootEloquent();*/
 
 

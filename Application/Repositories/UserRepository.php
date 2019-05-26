@@ -9,4 +9,5 @@ class UserRepository extends BaseRepository {
 	protected static $model = User::class;
 
 
+
 }

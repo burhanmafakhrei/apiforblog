@@ -10,6 +10,8 @@ namespace Application\Models;
 
 
 class User extends BaseModel {
-	protected $guarded = ['user_id'];
-	protected $primaryKey='user_id';
+
+    public $PrimaryKey="user_id";
+    public $TableName ="users";
+    public $datamembers = array();
 }
