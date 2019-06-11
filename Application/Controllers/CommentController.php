@@ -4,25 +4,20 @@
 namespace Application\Controllers;
 
 
-use Application\Models\Post;
-use Application\Repositories\PostRepository;
-use Application\Services\jsondata\jsondata;
-use Application\Services\logging\logging;
+use Application\Repositories\CommentRepository;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 
-class PostController
+class CommentController
 {
-    private $PostRepository;
+    const key = '64646400';
+    private $commentRepository;
     public $data;
-
     public function __construct()
     {
-        $this->PostRepository = new PostRepository();
+        $this->commentRepository=new CommentRepository();
         $this->data = json_decode(file_get_contents("php://input"));
-
     }
-
     public function add()
     {
         $jwt = isset($this->data->jwt) ? $this->data->jwt : "";
@@ -31,15 +26,15 @@ class PostController
 
 
             $newPostData = [
-               'post_user_id' => $decoded->id,
-                'post_title' => $this->data->post_title,
-                'post_body' => $this->data->post_body,
-                'post_created_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'comment_user_id' => $decoded->id,
+                'comment_title' => $this->data->comment_title,
+                'comment_body' => $this->data->comment_body,
+                'comment_created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ];
-            $result = $this->PostRepository->create($newPostData);
+            $result = $this->commentRepository->create($newPostData);
 
             if ($result ) {
-                $data = ['action' => 'success add post', 'massage' => ''];
+                $data = ['action' => 'success add comment', 'massage' => ''];
 
             } else {
                 $data = ['action' => 'failed add', 'massage' => ''];
@@ -53,11 +48,11 @@ class PostController
 
     public function edit()
     {
-        
+
     }
 
     public function del()
     {
-        
+
     }
 }
