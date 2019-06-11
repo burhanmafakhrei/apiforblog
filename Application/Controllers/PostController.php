@@ -9,6 +9,7 @@ use Application\Repositories\PostRepository;
 use Application\Services\jsondata\jsondata;
 use Application\Services\logging\logging;
 use Carbon\Carbon;
+use Firebase\JWT\JWT;
 
 class PostController
 {
@@ -30,7 +31,7 @@ class PostController
 
 
             $newPostData = [
-                'post_user_id' => $this->$decoded->id,
+               'post_user_id' => $this->$decoded->id,
                 'post_title' => $this->data->post_title,
                 'post_body' => $this->data->post_body,
                 'post_created_at' => Carbon::now()->format('Y-m-d H:i:s')

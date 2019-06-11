@@ -31,10 +31,10 @@ class AuthJwt
             $decoded = JWT::decode($jwt, AuthJwt::key, array('HS256'));
             $criteria = [
                 'user_email' => $decoded->email,
-                'user_password' => ($decoded->password)
+                'user_password' => $decoded->password
             ];
-            $result = $this->usersRepository->findBy($criteria, 1);
-            if ($result && $result instanceof User) {
+            $result = $this->usersRepository->findBy($criteria);
+            if ($result) {
                 return true;
             } else {
                 return false;
