@@ -87,23 +87,25 @@ class UserController
             'user_password' => md5($this->data->password)
         ];
         $result = $this->usersRepository->findBy($criteria);
-        if ($result) {
-       //     $token = $this->GetJwt($result);
-            $data = ['action' => 'success login', 'massage' => $result->user_email, 'jwt' => $token];
-        } else {
+        if ($result){
+            $row = $result->fetch_assoc();
+            $token = $this->GetJwt($row);
+            $data = ['action' => 'success login', 'massage' => $row["user_email"], 'jwt' => $token];
+        }
+        else{
             $data = ['action' => 'failed login', 'massage' => 'email or password mistake'];
         }
         logging::logging($data);
         jsondata::ReturnJson($data);
     }
 
-    public function GetJwt(User $user)
+    public function GetJwt($row)
     {
 
         $token = array(
-            "id" => $user->user_id,
-            "email" => $user->user_email,
-            "password" => $user->user_password
+            "id" => $row["user_id"],
+            "email" => $row["user_email"],
+            "password" =>$row["user_password"]
         );
         $jwt = JWT::encode($token, UserController::key);
 

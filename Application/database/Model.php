@@ -128,19 +128,23 @@ class Model extends Mysql
     public function findBy($criteria)
     {
 
-        //$where="user_email='email.gmail.com' AND user_password='c4ca4238a0b923820dcc509a6f75849b'";
+
         $where='';
+        $w1=false;
         foreach ($criteria as $key => $value){
-            $where=$where. $key.'='.$value.' AND ';
+            if ($w1){
+                $where=$where.' AND ';
+            }
+            $w1=true;
+            $where=$where. $key.'='."'$value'";
         }
         $sql = "SELECT * FROM $this->TableName WHERE $where";
-        //var_dump($sql);
-        jsondata::ReturnJson(['q'=>$sql]);
+
 
         $result = $this->conn->query($sql);
 
         if ($result->num_rows > 0) {
-            return true;
+            return $result;
         } else {
             return false;
         }
