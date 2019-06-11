@@ -55,8 +55,8 @@ class UserController
         $criteria = [
             'user_email' => $email
         ];
-        $result = $this->usersRepository->findBy($criteria, 1);
-        if ($result && $result instanceof User) {
+        $result = $this->usersRepository->findBy($criteria);
+        if ($result) {
             $data = ['action' => 'failed register', 'massage' => 'email is duplicate'];
             logging::logging($data);
             jsondata::ReturnJson($data);
@@ -112,7 +112,7 @@ class UserController
         return $jwt;
     }
 
-    public function Logined()
+    public function logined()
     {
         // get jwt
         $jwt = isset($this->data->jwt) ? $this->data->jwt : "";
@@ -122,9 +122,11 @@ class UserController
                 'user_email' => $this->$decoded->email,
                 'user_password' => md5($decoded->password)
             ];
-            $result = $this->usersRepository->findBy($criteria, 1);
-            if ($result && $result instanceof User) {
+            $result = $this->usersRepository->findBy($criteria);
+            if ($result){
                 return true;
+            }else{
+                false;
             }
         }
 
