@@ -38,7 +38,7 @@ class PostController
             ];
             $result = $this->PostRepository->create($newPostData);
 
-            if ($result && $result instanceof Post) {
+            if ($result ) {
                 $data = ['action' => 'success add post', 'massage' => $result->post_id];
 
             } else {
