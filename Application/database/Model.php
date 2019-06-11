@@ -2,6 +2,8 @@
 
 namespace Application\database;
 
+use Application\Services\jsondata\jsondata;
+
 class Model extends Mysql
 {
 
@@ -10,8 +12,6 @@ class Model extends Mysql
     protected $TableName = "Table";
     public $UnProtectedExecute = FALSE;
     static $id = 12;
-
-
 
 
     public function __set($variable, $value)
@@ -108,9 +108,42 @@ class Model extends Mysql
 
     public function Find($field, $value, $op = "=")
     {
-        $fd = ($this->Select($field . $op . "'" . $this->ReadyString($value) . "'"));
-        if (count($fd) > 0)
-            return $fd[0];
+        /* $fd = ($this->Select($field . $op . "'" . $this->ReadyString($value) . "'"));
+         if (count($fd) > 0)
+             return $fd[0];*/
+
+
+        //  $sql = "SELECT id, firstname, lastname FROM MyGuests";
+        $sql = "SELECT * FROM $this->TableName WHERE $field$op'$value'";
+        $result = $this->conn->query($sql);
+
+        if ($result->num_rows > 0) {
+           return true;
+        } else {
+           return false;
+        }
+      //  $conn->close();
+    }
+
+    public function findBy($criteria)
+    {
+
+        //$where="user_email='email.gmail.com' AND user_password='c4ca4238a0b923820dcc509a6f75849b'";
+        $where='';
+        foreach ($criteria as $key => $value){
+            $where=$where. $key.'='.$value.' AND ';
+        }
+        $sql = "SELECT * FROM $this->TableName WHERE $where";
+        //var_dump($sql);
+        jsondata::ReturnJson(['q'=>$sql]);
+
+        $result = $this->conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function FindAll($cond = "")
@@ -175,7 +208,7 @@ class Model extends Mysql
         return $mx;
     }
 
-    public function Save(array $save)
+    public function save(array $save)
     {
         $fs = array();
         $vs = array();
@@ -190,19 +223,21 @@ class Model extends Mysql
         $vs = implode(",", $vs);
 
         $sql = "INSERT INTO $table ($fs) VALUES ($vs) ";
-        //  $sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES ('John', 'Doe', 'john@example.com')";
 
-        if ($this->Query($sql) === TRUE) {
-            echo "New record created successfully";
+        if ($this->conn->query($sql) === TRUE) {
+
+            return true;
         } else {
-            echo "Error: " . $sql . "<br>";
+            return false;
         }
+        $this->conn->close();
     }
 
     public function ReadyString($value)
     {
         return addslashes($value);
     }
+
 }
 
 

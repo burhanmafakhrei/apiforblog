@@ -8,7 +8,13 @@ namespace Application\Repositories\Contract;
 abstract class BaseRepository
 {
     protected static $model;
+    protected  $modelObject;
 
+    public function __construct()
+    {
+
+        $this->modelObject=new static::$model;
+}
 
 
     /*	public function find( int $id ) {
@@ -52,9 +58,10 @@ abstract class BaseRepository
 
 
 
-    public function find($id)
+    public function find($field,$value)
     {
-        return $this->db->query("SELECT * FROM {$this->table} WHERE $this->primaryKey=$id LIMIT 1");
+       // return $this->db->query("SELECT * FROM {$this->table} WHERE $this->primaryKey=$id LIMIT 1");
+        return $this->modelObject->Find($field,$value);
     }
 
     public function delete($id)
@@ -69,7 +76,13 @@ abstract class BaseRepository
 
     public function create($data)
     {
-        return static::$model::Save($data);
+       // return static::$model::Save($data);
+        return $this->modelObject->Save($data);
+    }
+
+    public function findBy($criteria)
+    {
+        return $this->modelObject->findby($criteria);
     }
 }
 

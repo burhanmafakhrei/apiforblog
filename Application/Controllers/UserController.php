@@ -19,13 +19,13 @@ class UserController
 
     public function __construct()
     {
-       $this->usersRepository=new User();
+       $this->usersRepository=new UserRepository();
         $this->data = json_decode(file_get_contents("php://input"));
     }
 
     public function add()
     {
-        if (1) {
+        if (!$this->HasEmail($this->data->email)) {
             $newUserData = [
                 'user_name' => $this->data->name,
                 'user_email' => $this->data->email,
@@ -34,9 +34,9 @@ class UserController
                 'user_ip' => $_SERVER['REMOTE_ADDR'],
                 'user_created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ];
-            $result = $this->usersRepository->save($newUserData);
+            $result = $this->usersRepository->create($newUserData);
 
-            if ($result && $result instanceof User) {
+            if ($result) {
                 $data = ['action' => 'success register', 'massage' => $result->user_email];
 
             } else {
@@ -68,13 +68,16 @@ class UserController
 
     public function HasEmail($email)
     {
-        $criteria = [
-            'user_email' => $email
-        ];
-        $result = $this->usersRepository->findBy($criteria, 1);
-        if ($result && $result instanceof User) {
+        $result=$this->usersRepository->find('user_email',$email);
+        if ($result) {
+            $data = ['action' => 'failed register', 'massage' => 'email is duplicate'];
+            logging::logging($data);
+            jsondata::ReturnJson($data);
             return true;
+        } else {
+            return false;
         }
+
     }
 
     public function login()
@@ -83,9 +86,9 @@ class UserController
             'user_email' => $this->data->email,
             'user_password' => md5($this->data->password)
         ];
-        $result = $this->usersRepository->findBy($criteria, 1);
-        if ($result && $result instanceof User) {
-            $token = $this->GetJwt($result);
+        $result = $this->usersRepository->findBy($criteria);
+        if ($result) {
+       //     $token = $this->GetJwt($result);
             $data = ['action' => 'success login', 'massage' => $result->user_email, 'jwt' => $token];
         } else {
             $data = ['action' => 'failed login', 'massage' => 'email or password mistake'];

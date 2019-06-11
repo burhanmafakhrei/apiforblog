@@ -9,8 +9,8 @@
 namespace Application\Models;
 
 
-class User extends BaseModel {
 
+class User extends BaseModel {
     public $PrimaryKey="user_id";
     public $TableName ="users";
     public $datamembers = array();
