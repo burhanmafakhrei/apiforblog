@@ -31,7 +31,7 @@ class PostController
 
 
             $newPostData = [
-               'post_user_id' => $this->$decoded->id,
+               'post_user_id' => $decoded->id,
                 'post_title' => $this->data->post_title,
                 'post_body' => $this->data->post_body,
                 'post_created_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -39,7 +39,7 @@ class PostController
             $result = $this->PostRepository->create($newPostData);
 
             if ($result ) {
-                $data = ['action' => 'success add post', 'massage' => $result->post_id];
+                $data = ['action' => 'success add post', 'massage' => ''];
 
             } else {
                 $data = ['action' => 'failed add', 'massage' => ''];
